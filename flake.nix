@@ -55,6 +55,7 @@
         pkgs.ghc
         pkgs.nodejs
         pkgs.stack
+        pkgs.cabal-install
         local-neovim
       ];
     };
