@@ -12,6 +12,8 @@
 
   in {
 
+    packages.x86_64-linux.default = self.lib.neovimForHaskell { };
+
     packages.x86_64-linux.vimrc = pkgs.stdenv.mkDerivation {
       name = "nvim-haskell";
       src = ./.;
@@ -50,8 +52,6 @@
     };
 
     devShells.x86_64-linux.default = self.lib.neovimForHaskell { };
-
-    packages.x86_64-linux.default = self.lib.neovimForHaskell { };
 
   };
 }
