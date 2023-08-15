@@ -16,12 +16,12 @@
       name = "nvim-haskell";
       src = ./.;
       buildInputs = with pkgs; [
-        nvim-vimrc-code.packages.x86_64-linux.default
+        nvim-vimrc-code.packages.x86_64-linux.vimrc
       ];
       installPhase = ''
         mkdir -p $out/etc/nvim
         cat \
-        ${nvim-vimrc-code.packages.x86_64-linux.default.outPath}/etc/nvim/vimrc \
+        ${nvim-vimrc-code.packages.x86_64-linux.vimrc.outPath}/etc/nvim/vimrc \
         ${./lua-start} \
         ${./treesitter.lua} \
         ${./lspconfig.lua} \
