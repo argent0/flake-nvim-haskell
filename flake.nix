@@ -51,5 +51,7 @@
 
     devShells.x86_64-linux.default = self.lib.neovimForHaskell { };
 
+    packages.x86_64-linux.default = self.lib.neovimForHaskell { };
+
   };
 }
