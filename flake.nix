@@ -12,7 +12,7 @@
 
   in {
 
-    packages.x86_64-linux.default = pkgs.stdenv.mkDerivation {
+    packages.x86_64-linux.vimrc = pkgs.stdenv.mkDerivation {
       name = "nvim-haskell";
       src = ./.;
       buildInputs = with pkgs; [
@@ -29,36 +29,27 @@
       '';
     };
 
-
-    devShells.x86_64-linux.default = pkgs.mkShell {
-      buildInputs = let
-        vimrcPath = "${self.packages.x86_64-linux.default}/etc/nvim/vimrc";
-        local-neovim = pkgs.neovim.override {
-          configure = { # Additional plugins to be installed
-          packages.myVimPackages = with pkgs.vimPlugins; {
-            start = [
-              vim-nix
-              copilot-vim
-              vim-surround
-              nvim-lspconfig
-              nvim-cmp
-              cmp-nvim-lsp
-              (nvim-treesitter.withPlugins (p: with p; [ haskell ]))
-            ];
-            opt = [ ];
-          };
-          customRC = builtins.readFile vimrcPath;
-        };
+    lib = let
+      vimrcPath = "${self.packages.x86_64-linux.vimrc}/vimrc";
+      extraVimrcLines = builtins.readFile vimrcPath;
+    in {
+      version = "1.0.0";
+      neovimForHaskell = {
+        extraVimrcLines ? "",
+        extraVimPlugins ? [ ],
+      }: nvim-vimrc-code.lib.neovim {
+        extraVimrcLines = extraVimrcLines;
+        extraVimPlugins = with pkgs.vimPlugins; [
+          vim-surround
+          nvim-lspconfig
+          nvim-cmp
+          cmp-nvim-lsp
+          (nvim-treesitter.withPlugins (p: with p; [ haskell ]))
+        ] ++ extraVimPlugins;
       };
-      in [
-        pkgs.haskell-language-server
-        pkgs.ghc
-        pkgs.nodejs
-        pkgs.stack
-        pkgs.cabal-install
-        local-neovim
-      ];
     };
+
+    devShells.x86_64-linux.default = self.lib.neovimForHaskell { };
 
   };
 }
