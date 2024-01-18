@@ -37,6 +37,7 @@
       neovimForHaskell = {
         extraVimrcLines ? "",
         extraVimPlugins ? [ ],
+	extraNixDerivations ? [ ],
       }: nvim-vimrc-code.lib.neovim {
         extraVimrcLines = extraVimrcLines;
         extraVimPlugins = with pkgs.vimPlugins; [
@@ -46,6 +47,7 @@
           cmp-nvim-lsp
           (nvim-treesitter.withPlugins (p: with p; [ haskell ]))
         ] ++ extraVimPlugins;
+	extraNixDerivations = extraNixDerivations;
       };
     };
 
